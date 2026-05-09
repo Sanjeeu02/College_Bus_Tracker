@@ -284,15 +284,32 @@ function connectFb(cfg) {
     // ⚡ Handle Mobile Redirect Login
     S.auth.getRedirectResult().then(async result => {
       if (result && result.user) {
-        S.user = result.user;
-        const freshRole = await getRoleByUid(result.user.uid);
-        if (freshRole) {
-          S.role = freshRole;
-          localStorage.setItem('ba_cached_role', S.role);
-          handleAuthSuccess(result.user);
-        } else {
-          showRoleScreen();
+        showToast('👋 Finalizing your login...');
+        const user = result.user;
+        S.user = user;
+        
+        let role = await getRoleByUid(user.uid);
+        
+        if (!role) {
+          // New user coming back from Google redirect — check for pending role
+          role = localStorage.getItem('ba_pending_role') || S.selectedRole || 'student';
+          
+          const docData = { 
+            name: user.displayName || user.email, 
+            email: user.email, 
+            role, 
+            createdAt: Date.now() 
+          };
+
+          if (role === 'student') await S.studentDb.collection('students').doc(user.uid).set(docData);
+          else if (role === 'driver') await S.driverDb.collection('drivers').doc(user.uid).set(docData);
+          else if (role === 'admin') await S.adminDb.collection('admins').doc(user.uid).set(docData);
         }
+        
+        S.role = role;
+        localStorage.setItem('ba_cached_role', S.role);
+        localStorage.removeItem('ba_pending_role'); // Clean up
+        handleAuthSuccess(user);
       }
     }).catch(e => {
       if (e.code === 'auth/unauthorized-domain') {
@@ -2014,6 +2031,8 @@ async function loginWithGoogle() {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
     if (isMobile) {
+      // ⚡ IMPORTANT: Save role intent before redirecting
+      localStorage.setItem('ba_pending_role', S.selectedRole || 'student');
       await S.auth.signInWithRedirect(provider);
     } else {
       const res = await S.auth.signInWithPopup(provider);
