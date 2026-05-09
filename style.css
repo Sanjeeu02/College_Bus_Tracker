@@ -2412,6 +2412,7 @@ body {
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
+  margin-top: 32px; /* Added gap between password and button */
   transition: all 0.2s;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
@@ -2764,6 +2765,10 @@ body {
     color: rgba(255, 255, 255, 0.5);
   }
   
+  .submit-btn-v4 {
+    margin-top: 24px;
+  }
+
   .back-btn-v4 {
     top: -60px;
     background: rgba(255, 255, 255, 0.05);
