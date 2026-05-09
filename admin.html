@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=8" />
+    <link rel="stylesheet" href="style.css?v=9" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
@@ -254,7 +254,7 @@
             font-size: 0.88rem;
             font-weight: 700;
             color: var(--sub);
-            background: #f1f5f9;
+            background: rgba(255, 255, 255, 0.05); /* Fixed from light gray to glassmorphic dark */
             border-radius: 12px;
             border: 1px solid var(--border);
         }
@@ -1294,7 +1294,7 @@
             </div>
             <nav class="admin-nav">
                 <!-- (App Home link removed) -->
-                <div class="admin-nav-stat">Live Pilots: <span id="live-count">0</span></div>
+                <div class="admin-nav-stat">Live Buses: <span id="live-count">0</span></div>
                 <div class="admin-nav-stat">Total Fleet: <span id="total-count" style="color:var(--text)">0</span></div>
                 <div style="flex-grow: 1;"></div>
                 <button class="admin-nav-item nav-logout" onclick="doLogout()">⬅ Logout</button>
